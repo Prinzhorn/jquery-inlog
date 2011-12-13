@@ -16,9 +16,12 @@
 	<script type="text/javascript">
 	/* <![CDATA[ */
 	$(function() {
-		$('body').children('div').next();
+		var $obj = $(document);
 
-		$('#bar').siblings('div');
+		$obj.add('#foo', '#bar');
+		$obj.add(document.getElementById('foo'));
+
+		$obj.find('#foo').nextUntil('#bar');
 	});
 	/* ]]> */
 	</script>
