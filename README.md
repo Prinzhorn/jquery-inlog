@@ -11,15 +11,17 @@ Example
 ========
 
 ```javascript
-$elem.children('div').next('p');
+$obj.find('#foo').nextUntil('#bar');
 ```
 
 Would output something like the following,
 where each second line can be inspected in your browser console.
 
 ```
-children(div)
-[div#foo, div#bar]
-next(p)
-[p#bacon, p, p.wooooot, p.rockstar]
+find("#foo")
++[div#foo]
+is("#bar")
+true
+nextUntil("#bar")
++[]
 ```
