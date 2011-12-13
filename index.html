@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+	<title>jQuery inlog proof of concept</title>
+</head>
+
+<body>
+	<div id="foo"></div>
+	<div id="bar"></div>
+
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+	<script type="text/javascript" src="jquery.inlog.js"></script>
+
+	<script type="text/javascript">
+	/* <![CDATA[ */
+	$(function() {
+		$('body').children('div').next();
+
+		$('#bar').siblings('div');
+	});
+	/* ]]> */
+	</script>
+</body>
+
+</html>
