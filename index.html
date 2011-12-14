@@ -20,7 +20,8 @@
 	<script type="text/javascript">
 	/* <![CDATA[ */
 	$(function() {
-		$("#foo").parents(".bar").next().prev().parent().find(".foo:last").text("test");
+		$.inlog(true);
+		$("#foo").parents(".bar").next().prev().parent().find(".foo:last").text("test").fadeOut();
 	});
 	/* ]]> */
 	</script>

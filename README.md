@@ -41,3 +41,7 @@ Special treatment for:
 * each
 * map
 
+
+Output nested calls nested with console.group()
+e.g.:fadeOut() calls animate() which calls queue()
+

@@ -1,4 +1,14 @@
 ;(function() {
+	//Global state
+	var enabled = false;
+
+	/*
+	 * Allows for controlling from outside.
+	 */
+	jQuery.inlog = function(state) {
+		enabled = state;
+	};
+
 	/**
 	 * Outputs a function call with all parameters passed.
 	 *
@@ -39,7 +49,9 @@
 			var ret = originalFunction.apply(this, arguments);
 
 			//Log the shit out of it
-			logFunctionCall(name, arguments, ret);
+			if(enabled === true) {
+				logFunctionCall(name, arguments, ret);
+			}
 
 			//Return the original return value as if nothing happened
 			return ret;
@@ -73,7 +85,12 @@
 			'end', 'eq', 'filter', 'find', 'first', 'has', 'is',
 			'last', 'next', 'nextAll', 'nextUntil', 'not', 'offsetParent',
 			'parent', 'parents', 'parentsUntil', 'prev', 'prevAll',
-			'prevUntil', 'siblings', 'slice'];
+			'prevUntil', 'siblings', 'slice',
+
+			'animate', 'clearQueue', 'delay', 'dequeue', 'fadeIn',
+			'fadeOut', 'fadeTo', 'fadeToggle', 'hide', 'queue', 'show',
+			'slideDown', 'slideToggle', 'slideUp', 'stop', 'toggle'];
+
 
 		//Iterate over all functions and overwrite them
 		for(var i = 0, tmp; i < names.length; i++) {
