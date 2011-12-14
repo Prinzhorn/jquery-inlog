@@ -7,8 +7,12 @@
 </head>
 
 <body>
-	<div id="foo"></div>
-	<div id="bar"></div>
+	<div class="bar">
+		<div class="bar">
+			<div id="foo"></div>
+		</div>
+	</div>
+	<div id="bacon"></div>
 
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
 	<script type="text/javascript" src="jquery.inlog.js"></script>
@@ -16,13 +20,7 @@
 	<script type="text/javascript">
 	/* <![CDATA[ */
 	$(function() {
-		//var $obj = $(document);
-
-		//$obj.add('#foo', '#bar');
-		//$obj.add(document.getElementById('foo'));
-
-		//$obj.find('#foo').nextUntil('#bar');
-		$('#bar').position();
+		$("#foo").parents(".bar").next().prev().parent().find(".foo:last").text("test");
 	});
 	/* ]]> */
 	</script>

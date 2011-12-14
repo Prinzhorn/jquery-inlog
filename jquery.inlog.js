@@ -4,8 +4,10 @@
 	 *
 	 * @param name A human readable name of the function called
 	 * @param arguments The original "arguments" property inside the function
+	 * @param ret The original return value
+	 * @returns undefined
 	 * */
-	function logFunctionCall(name, arguments) {
+	function logFunctionCall(name, arguments, ret) {
 		var params = [], paramFormatStrings = [];
 
 		for(var i = 0; i < arguments.length; i++) {
@@ -14,9 +16,34 @@
 		}
 
 		//First argument of console.log is the format string.
-		params.unshift(name + '(' + paramFormatStrings.join(', ') + ')');
+		params.unshift(name + '(' + paramFormatStrings.join(', ') + ') ↷ %o');
+
+		//Last format string value is the return value
+		params.push(ret);
 
 		console.log.apply(null, params);
+	};
+
+
+	/**
+	 * Creates a Function which calls the "originalFunction"
+	 * and logs the call with the function as called "name".
+	 *
+	 * @param name The name of the original function. Human readable.
+	 * @param originalFunction A reference to the original function getting wrapped.
+	 * @returns A function, which calls the original function sourended by log calls.
+	 * */
+	function createReplacementFunction(name, originalFunction) {
+		return function() {
+			//Call the original function
+			var ret = originalFunction.apply(this, arguments);
+
+			//Log the shit out of it
+			logFunctionCall(name, arguments, ret);
+
+			//Return the original return value as if nothing happened
+			return ret;
+		};
 	};
 
 
@@ -25,20 +52,11 @@
 	 * Needs some special treatment.
 	 */
 	(function() {
+		//Keep track of the original function
 		var tmp = jQuery;
 
-		jQuery = function() {
-			//Call the original function
-			var ret = tmp.apply(this, arguments);
-
-			//Log the shit out of it
-			logFunctionCall('$', arguments);
-			console.log(ret);
-			console.log('\n');
-
-			//Return the original return value as if nothing happened
-			return ret;
-		};
+		//Overwrite that thing
+		jQuery = createReplacementFunction('$', tmp);
 
 		tmp.extend(jQuery, tmp);
 		$ = jQuery;
@@ -59,25 +77,11 @@
 
 		//Iterate over all functions and overwrite them
 		for(var i = 0, tmp; i < names.length; i++) {
+			//Keep track of the original function
+			var tmp = jQuery.fn[names[i]];
 
-			//Create a new scope to conserve variables until the function is called
-			(function(name) {
-				//Keep track of the original function
-				var tmp = jQuery.fn[name];
-
-				//Overwrite that thing
-				jQuery.fn[name] = function() {
-					//Call the original function
-					var ret = tmp.apply(this, arguments);
-
-					//Log the shit out of it
-					logFunctionCall(name, arguments);
-					console.log(ret);
-
-					//Return the original return value as if nothing happened
-					return ret;
-				};
-			})(names[i]);
+			//Overwrite that thing
+			jQuery.fn[names[i]] = createReplacementFunction(names[i], tmp);
 		}
 	})();
 })();
