@@ -36,6 +36,8 @@ TODO
 
 Special treatment for:
 * ~~jQuery() function~~
+
 * each
+
 * map
 
