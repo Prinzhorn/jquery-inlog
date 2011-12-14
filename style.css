@@ -1,0 +1,21 @@
+﻿html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, em, img, strong, sub, sup, b, u, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+	margin:0;
+	padding:0;
+}
+
+body {
+	background-color:#fff;
+	font-family:Arial,Helvetica,Verdana,sans-serif;
+}
+
+p {margin:.5em 0;}
+
+a {color:#00f;}
+a:hover {color:#f00;}
+
+img {border:none;}
+
+#wrapper {
+	width:940px;
+	margin:1em auto;
+}
