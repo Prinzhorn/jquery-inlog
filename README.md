@@ -9,6 +9,9 @@ This is just the result of a one hour proof of concept hacking.
 
 The original idea was taken from https://github.com/fmsf/jQueryLog
 
+Only tested in Firefox with Firebug. Works for me.
+
+
 Example
 ========
 
@@ -27,3 +30,12 @@ true
 nextUntil("#bar")
 +[]
 ```
+
+TODO
+========
+
+Special treatment for:
+* ~~jQuery() function~~
+* each
+* map
+
