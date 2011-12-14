@@ -7,6 +7,8 @@ It makes debugging of selectors and chains a breeze.
 
 This is just the result of a one hour proof of concept hacking.
 
+The original idea was taken from https://github.com/fmsf/jQueryLog
+
 Example
 ========
 
