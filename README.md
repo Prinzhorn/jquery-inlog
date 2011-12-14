@@ -5,7 +5,8 @@ See what your jQuery code does inside.
 jQuery inlog is a plugin, which injects (js ftw!) console.log calls inside your jQuery core.
 It makes debugging of selectors and chains a breeze.
 
-This is just the result of a one hour proof of concept hacking.
+~~This is just the result of a one hour proof of concept hacking.~~
+It's now more than "a one hour hack".
 
 The original idea was taken from https://github.com/fmsf/jQueryLog
 
