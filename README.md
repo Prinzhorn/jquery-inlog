@@ -60,12 +60,11 @@ Your can inspect return values, the this-value and even all parameters! WOOOOT!
 TODO
 ========
 
-Special treatment for:
-
-* ~~jQuery() function~~
-* each
-* map
-
-
-Output nested calls nested with console.group(), e.g.: fadeOut() calls animate() which calls queue()
+* Special treatment for:
+	* ~~jQuery() function~~
+	* each
+	* map
+* Do the same for Sizzle (jQuery.find)
+	* Add an option to enable Sizzle debugging
+* Output nested calls nested with console.group(), e.g.: fadeOut() calls animate() which calls queue()
 
