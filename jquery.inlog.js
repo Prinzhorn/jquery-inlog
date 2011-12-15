@@ -1,12 +1,23 @@
 ;(function() {
-	//Global state
-	var enabled = false;
+	var defaults = {
+		enabled: true,
+		thisValue: false
+	};
+
+	var settings = jQuery.extend({}, defaults);
 
 	/*
 	 * Allows for controlling from outside.
 	 */
-	jQuery.inlog = function(state) {
-		enabled = state;
+	jQuery.inlog = function(param) {
+		//Is param a boolean?
+		if(param === true || param === false) {
+			settings.enabled = param;
+		}
+		//Must be an object
+		else {
+			settings = jQuery.extend({}, defaults, param);
+		}
 	};
 
 	/**
@@ -17,16 +28,22 @@
 	 * @param ret The original return value
 	 * @returns undefined
 	 * */
-	function logFunctionCall(name, arguments, ret) {
-		var params = [], paramFormatStrings = [];
+	function logFunctionCall(name, arguments, ret, _this) {
+		var params = [], paramFormatStrings = [], formatString = '';
 
 		for(var i = 0; i < arguments.length; i++) {
 			params.push(arguments[i]);
 			paramFormatStrings.push('%o');
 		}
 
+		//Print this-value?
+		if(settings.thisValue) {
+			formatString = '(%o).';
+			params.unshift(_this);
+		}
+
 		//First argument of console.log is the format string.
-		params.unshift(name + '(' + paramFormatStrings.join(', ') + ') ↷ %o');
+		params.unshift(formatString + name + '(' + paramFormatStrings.join(', ') + ') ↷ %o');
 
 		//Last format string value is the return value
 		params.push(ret);
@@ -49,8 +66,8 @@
 			var ret = originalFunction.apply(this, arguments);
 
 			//Log the shit out of it
-			if(enabled === true) {
-				logFunctionCall(name, arguments, ret);
+			if(settings.enabled === true) {
+				logFunctionCall(name, arguments, ret, this);
 			}
 
 			//Return the original return value as if nothing happened
@@ -68,7 +85,7 @@
 		var tmp = jQuery;
 
 		//Overwrite that thing
-		jQuery = createReplacementFunction('$', tmp);
+		jQuery = createReplacementFunction('jQuery', tmp);
 
 		tmp.extend(jQuery, tmp);
 		$ = jQuery;

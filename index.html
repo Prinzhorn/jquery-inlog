@@ -19,8 +19,13 @@
 
 	<script type="text/javascript">
 	/* <![CDATA[ */
+
+	$.inlog({
+		enabled: true,
+		thisValue: true
+	});
+
 	$(function() {
-		$.inlog(true);
 		$("#foo").parents(".bar").next().prev().parent().find(".foo:last").text("test");
 	});
 	/* ]]> */

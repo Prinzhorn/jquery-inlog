@@ -2,15 +2,12 @@ jQuery inlog
 ======
 
 See what your jQuery code does inside.
-jQuery inlog is a plugin, which injects (js ftw!) console.log calls inside your jQuery core.
+jQuery inlog is a passive plugin, which injects (js ftw!) console.log calls inside your jQuery core.
 It makes debugging of selectors and chains a breeze.
-
-~~This is just the result of a one hour proof of concept hacking.~~
-It's now more than "a one hour hack".
 
 The original idea was taken from https://github.com/fmsf/jQueryLog
 
-Only tested in Firefox with Firebug. Works for me.
+Only tested in Firefox with Firebug. Nuff for me.
 
 
 Example
@@ -20,17 +17,16 @@ Example
 $obj.find('#foo').nextUntil('#bar');
 ```
 
-Would output something like the following,
-where each second line can be inspected in your browser console.
+Would output something like the following
 
 ```
-find("#foo")
-+[div#foo]
-is("#bar")
-true
-nextUntil("#bar")
-+[]
+find("#foo") ↷ +[div#foo]
+is("#bar") ↷ true
+nextUntil("#bar") ↷ +[]
 ```
+
+Your can inspect return values, the this-value and even all parameters!
+
 
 TODO
 ========
@@ -43,5 +39,6 @@ Special treatment for:
 
 
 Output nested calls nested with console.group()
+
 e.g.:fadeOut() calls animate() which calls queue()
 
