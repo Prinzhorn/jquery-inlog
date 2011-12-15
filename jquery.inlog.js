@@ -61,10 +61,10 @@
 	 * @param originalFunction A reference to the original function getting wrapped.
 	 * @returns A function, which calls the original function sourended by log calls.
 	 * */
-	function createReplacementFunction(name, originalFunction) {
+	function createReplacementFunction(name, origFunction) {
 		return function() {
 			//Call the original function
-			var ret = originalFunction.apply(this, arguments);
+			var ret = origFunction.apply(this, arguments);
 
 			//Log the shit out of it
 			if(settings.enabled === true) {
