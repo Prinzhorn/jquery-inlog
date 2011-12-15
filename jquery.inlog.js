@@ -23,30 +23,31 @@
 	/**
 	 * Outputs a function call with all parameters passed.
 	 *
-	 * @param name A human readable name of the function called
-	 * @param arguments The original "arguments" property inside the function
-	 * @param ret The original return value
+	 * @param funcName A human readable name of the function called
+	 * @param origArguments The original "arguments" property inside the function
+	 * @param origReturn The original return value of the function
+	 * @param origThis The original context the function was running in
 	 * @returns undefined
 	 * */
-	function logFunctionCall(name, arguments, ret, _this) {
+	function logFunctionCall(funcName, origArguments, origReturn, origThis) {
 		var params = [], paramFormatStrings = [], formatString = '';
 
-		for(var i = 0; i < arguments.length; i++) {
-			params.push(arguments[i]);
+		for(var i = 0; i < origArguments.length; i++) {
+			params.push(origArguments[i]);
 			paramFormatStrings.push('%o');
 		}
 
 		//Print this-value?
 		if(settings.thisValue) {
 			formatString = '(%o).';
-			params.unshift(_this);
+			params.unshift(origThis);
 		}
 
 		//First argument of console.log is the format string.
-		params.unshift(formatString + name + '(' + paramFormatStrings.join(', ') + ') ↷ %o');
+		params.unshift(formatString + funcName + '(' + paramFormatStrings.join(', ') + ') ↷ %o');
 
 		//Last format string value is the return value
-		params.push(ret);
+		params.push(origReturn);
 
 		console.log.apply(null, params);
 	};
