@@ -19,6 +19,10 @@ h1, h2, h3, h4, h5, h6 {
 	margin:1em 0;
 }
 
+ul {
+	padding-left:1.5em;
+}
+
 #wrapper {
 	width:940px;
 	margin:1em auto;
