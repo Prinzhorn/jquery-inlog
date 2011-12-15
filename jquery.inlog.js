@@ -57,18 +57,18 @@
 	 * Creates a Function which calls the "originalFunction"
 	 * and logs the call with the function as called "name".
 	 *
-	 * @param name The name of the original function. Human readable.
-	 * @param originalFunction A reference to the original function getting wrapped.
+	 * @param funcName The name of the original function. Human readable.
+	 * @param origFunction A reference to the original function getting wrapped.
 	 * @returns A function, which calls the original function sourended by log calls.
 	 * */
-	function createReplacementFunction(name, origFunction) {
+	function createReplacementFunction(funcName, origFunction) {
 		return function() {
 			//Call the original function
 			var ret = origFunction.apply(this, arguments);
 
 			//Log the shit out of it
 			if(settings.enabled === true) {
-				logFunctionCall(name, arguments, ret, this);
+				logFunctionCall(funcName, arguments, ret, this);
 			}
 
 			//Return the original return value as if nothing happened
