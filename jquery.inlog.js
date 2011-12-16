@@ -49,7 +49,7 @@
 		//Last format string value is the return value
 		params.push(origReturn);
 
-		console.log.apply(null, params);
+		console.log.apply(console, params);
 	};
 
 
