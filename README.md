@@ -62,6 +62,7 @@ Your can inspect return values, the this-value and even all parameters! WOOOOT!
 TODO
 ========
 
+* include/run the jQuery core tests to ensure that we don't cause any side effects
 * ~~Not all functions are included (right now only http://api.jquery.com/category/traversing/)~~
 * Special treatment for:
 	* ~~jQuery() function~~
