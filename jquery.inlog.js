@@ -1,10 +1,13 @@
 ;(function() {
 	var defaults = {
 		enabled: true,
-		thisValue: false
+		thisValue: false,
+		returnValue: true,
+		indent: false
 	};
 
 	var settings = jQuery.extend({}, defaults);
+
 
 	/*
 	 * Allows for controlling from outside.
@@ -19,6 +22,43 @@
 			settings = jQuery.extend({}, defaults, param);
 		}
 	};
+
+
+	/*
+	 * Since nothing runs parallel,
+	 * we can keep track of the stack trace in a global variable.
+	 */
+	var maintrace, subtrace, tracedepth = 0;
+
+	//Example content of trace
+	/*
+	{
+		"function": "jQuery",
+		"this": "<some pointer>",
+		"arguments": ["<some values or pointers>"],
+		"return": "<some value or pointer>",
+		"sub"://One or multiple function calls on the same depth
+		[
+			{
+				"function": "parents",
+				"this": "<some pointer>",
+				"arguments": ["<some values or pointers>"],
+				"return": "<some value or pointer>",
+				"sub":
+				[
+					{
+						"function": "pushStack",
+						"this": "<some pointer>",
+						"arguments": ["<some values or pointers>"],
+						"return": "<some value or pointer>",
+						"sub": []
+					}
+				]
+			}
+		]
+	}
+	*/
+
 
 	/**
 	 * Outputs a function call with all parameters passed.
@@ -44,13 +84,33 @@
 		}
 
 		//First argument of console.log is the format string.
-		params.unshift(formatString + funcName + '(' + paramFormatStrings.join(', ') + ') ↷ %o');
+		params.unshift(formatString + funcName + '(' + paramFormatStrings.join(', ') + ')');
 
-		//Last format string value is the return value
-		params.push(origReturn);
+		if(settings.returnValue) {
+			params[0] += ' ↷ %o';
+
+			params.push(origReturn);
+		}
 
 		console.log.apply(console, params);
 	};
+
+
+	function logTrace(trace) {
+		logFunctionCall(trace["function"], trace["arguments"], trace["return"], trace["this"]);
+
+		for(var i = 0; i < trace["sub"].length; i++) {
+			if(settings.indent) {
+				console.groupCollapsed();
+			}
+
+			logTrace(trace["sub"][i]);
+
+			if(settings.indent) {
+				console.groupEnd();
+			}
+		}
+	}
 
 
 	/**
@@ -63,12 +123,47 @@
 	 * */
 	function createReplacementFunction(funcName, origFunction) {
 		return function() {
+			//Boring. Scroll down for the fun part.
+			if(settings.enabled === false) {
+				return origFunction.apply(this, arguments);
+			}
+
+			//Create new trace and keep track of it
+			var _trace = {
+				"function": funcName,
+				"this": this,
+				"arguments": arguments,
+				"sub": []
+			};
+
+			//Keep track if this was the first call
+			var firstTrace = (tracedepth === 0);
+
+			tracedepth++;
+
+			//Check if this is the first call or if already deeper
+			if(firstTrace) {
+				//Set everything to the newly greated trace
+				maintrace = subtrace = _trace;
+			} else {
+				//Push the new trace to the path of the parent trace
+				subtrace["sub"].push(_trace);
+				subtrace = _trace;
+			}
+
 			//Call the original function
 			var ret = origFunction.apply(this, arguments);
 
-			//Log the shit out of it
-			if(settings.enabled === true) {
-				logFunctionCall(funcName, arguments, ret, this);
+			//Trace the return value (unknown before this point)
+			_trace["return"] = ret;
+
+			//Reset tracing if this function call was the top most
+			//And if it was the top most call, we can now log it
+			if(firstTrace) {
+				tracedepth = 0;
+
+				//Log the shit out of it
+				logTrace(maintrace);
 			}
 
 			//Return the original return value as if nothing happened
@@ -97,26 +192,17 @@
 	 * Generic injections for most functions.
 	 */
 	(function() {
-		//List of functions which will get code injected
-		var names = [
-			'add', 'andSelf', 'children', 'closest', 'contents',
-			'end', 'eq', 'filter', 'find', 'first', 'has', 'is',
-			'last', 'next', 'nextAll', 'nextUntil', 'not', 'offsetParent',
-			'parent', 'parents', 'parentsUntil', 'prev', 'prevAll',
-			'prevUntil', 'siblings', 'slice',
+		var rx_ignore = /^constructor|jquery|init$/;
 
-			'animate', 'clearQueue', 'delay', 'dequeue', 'fadeIn',
-			'fadeOut', 'fadeTo', 'fadeToggle', 'hide', 'queue', 'show',
-			'slideDown', 'slideToggle', 'slideUp', 'stop', 'toggle'];
+		//Iterate over all function and replace most of them
+		for(var name in jQuery.fn) {
+			if(jQuery.fn.hasOwnProperty(name) && jQuery.isFunction(jQuery.fn[name]) && !rx_ignore.test(name)) {
+				//Keep track of the original function
+				var tmp = jQuery.fn[name];
 
-
-		//Iterate over all functions and overwrite them
-		for(var i = 0, tmp; i < names.length; i++) {
-			//Keep track of the original function
-			var tmp = jQuery.fn[names[i]];
-
-			//Overwrite that thing
-			jQuery.fn[names[i]] = createReplacementFunction(names[i], tmp);
+				//Overwrite that thing
+				jQuery.fn[name] = createReplacementFunction(name, tmp);
+			}
 		}
 	})();
 })();
