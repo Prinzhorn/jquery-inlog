@@ -5,6 +5,8 @@ See what your jQuery code does inside like a boss.
 jQuery inlog is a passive plugin, which injects (js ftw!) console.log calls inside your jQuery core.
 It makes debugging of selectors and chains a breeze.
 
+I call it black-box magic. Or short: black magic. Or even shorter: js
+
 The original idea was taken from https://github.com/fmsf/jQueryLog
 
 Only tested in Firefox with Firebug. Nuff for me.
