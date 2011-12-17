@@ -52,9 +52,13 @@
 		<h1 id="docs">Documentation / Reference</h1>
 		<p>Include jquery.inlog.js after jQuery core and you're done. See options if you want more control.</p>
 		<h2>Options</h2>
-<pre class="prettyfy">
-
-</pre>
+		<p>You can call $.inlog(options) any time to change options. Available options:</p>
+<pre class="prettyfy">var defaults = {
+	enabled: true, //Shortcut: $.inlog(true|false);
+	thisValue: false, //Output this-value or not
+	returnValue: true, //Output return-value or not
+	indent: false //Indent nested calls or not
+};</pre>
 	</div>
 
 	<script src="google-code-prettify/prettify.js" type="text/javascript"></script>
