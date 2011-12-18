@@ -1,4 +1,4 @@
-;(function() {
+;(function(undefined) {
 	var defaults = {
 		enabled: true,
 		thisValue: false,
@@ -30,7 +30,7 @@
 	 */
 	var maintrace, subtrace, tracedepth = 0;
 
-	//Example content of trace
+	//Example content of maintrace
 	/*
 	{
 		"function": "jQuery",
@@ -73,6 +73,12 @@
 		var params = [], paramFormatStrings = [], formatString = '';
 
 		for(var i = 0; i < origArguments.length; i++) {
+			//You may pass "undefined" explicitely to a function.
+			//foo() ist something else than foo(undefined)
+			if(origArguments[i] === undefined) {
+				break;
+			}
+
 			params.push(origArguments[i]);
 			paramFormatStrings.push('%o');
 		}
@@ -99,16 +105,16 @@
 	function logTrace(trace) {
 		logFunctionCall(trace["function"], trace["arguments"], trace["return"], trace["this"]);
 
+		if(settings.indent && trace["sub"].length) {
+			console.groupCollapsed();
+		}
+
 		for(var i = 0; i < trace["sub"].length; i++) {
-			if(settings.indent) {
-				console.groupCollapsed();
-			}
-
 			logTrace(trace["sub"][i]);
+		}
 
-			if(settings.indent) {
-				console.groupEnd();
-			}
+		if(settings.indent && trace["sub"].length) {
+			console.groupEnd();
 		}
 	}
 
@@ -136,17 +142,20 @@
 				"sub": []
 			};
 
+			var parenttrace;
+
 			//Keep track if this was the first call
-			var firstTrace = (tracedepth === 0);
+			var isFirst = (tracedepth === 0);
 
 			tracedepth++;
 
 			//Check if this is the first call or if already deeper
-			if(firstTrace) {
-				//Set everything to the newly greated trace
+			if(isFirst) {
+				//Set everything to the newly created trace
 				maintrace = subtrace = _trace;
 			} else {
 				//Push the new trace to the path of the parent trace
+				parenttrace = subtrace;
 				subtrace["sub"].push(_trace);
 				subtrace = _trace;
 			}
@@ -159,11 +168,13 @@
 
 			//Reset tracing if this function call was the top most
 			//And if it was the top most call, we can now log it
-			if(firstTrace) {
+			if(isFirst) {
 				tracedepth = 0;
 
 				//Log the shit out of it
 				logTrace(maintrace);
+			} else {
+				subtrace = parenttrace;
 			}
 
 			//Return the original return value as if nothing happened

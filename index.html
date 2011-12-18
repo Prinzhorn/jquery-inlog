@@ -26,13 +26,13 @@
 	$(function() {
 		$.inlog({
 			enabled: true,
-			thisValue: false,
-			returnValue: false,
+			thisValue: true,
+			returnValue: true,
 			indent: true
 		});
 
-		$("#foo").text("test");
-		$("#foo").fadeOut();
+		$('div').fadeOut();
+		//$("#foo").parents(".bar").next().prev().parent().fadeOut();
 
 		$.inlog(false);
 	});
