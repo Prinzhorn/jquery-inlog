@@ -1,9 +1,10 @@
 ;(function(undefined) {
 	var defaults = {
-		enabled: true,
-		thisValue: false,
-		returnValue: true,
-		indent: false
+		enabled: true,//Enable logging
+		thisValue: false,//Output this-value
+		returnValue: true,//Output return-value
+		indent: false,//Indent nested calls
+		maxDepth: -1//Max depth of nested calls
 	};
 
 	var settings = jQuery.extend({}, defaults);
@@ -105,16 +106,19 @@
 	function logTrace(trace) {
 		logFunctionCall(trace["function"], trace["arguments"], trace["return"], trace["this"]);
 
-		if(settings.indent && trace["sub"].length) {
-			console.groupCollapsed();
-		}
+		//Has sub calls?
+		if(trace["sub"].length) {
+			if(settings.indent) {
+				console.groupCollapsed();
+			}
 
-		for(var i = 0; i < trace["sub"].length; i++) {
-			logTrace(trace["sub"][i]);
-		}
+			for(var i = 0; i < trace["sub"].length; i++) {
+				logTrace(trace["sub"][i]);
+			}
 
-		if(settings.indent && trace["sub"].length) {
-			console.groupEnd();
+			if(settings.indent) {
+				console.groupEnd();
+			}
 		}
 	}
 
@@ -142,6 +146,7 @@
 				"sub": []
 			};
 
+			//Keep track of out parent trace, if any.
 			var parenttrace;
 
 			//Keep track if this was the first call
@@ -154,8 +159,9 @@
 				//Set everything to the newly created trace
 				maintrace = subtrace = _trace;
 			} else {
-				//Push the new trace to the path of the parent trace
 				parenttrace = subtrace;
+
+				//Push the new trace to the path of the parent trace
 				subtrace["sub"].push(_trace);
 				subtrace = _trace;
 			}
@@ -167,13 +173,14 @@
 			_trace["return"] = ret;
 
 			//Reset tracing if this function call was the top most
-			//And if it was the top most call, we can now log it
 			if(isFirst) {
 				tracedepth = 0;
 
 				//Log the shit out of it
 				logTrace(maintrace);
 			} else {
+				//Reset to parent trace,
+				//because there may be calls on the same level as we are
 				subtrace = parenttrace;
 			}
 
