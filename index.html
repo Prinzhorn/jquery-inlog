@@ -45,19 +45,15 @@
 		<img src="console.png" />
 		<h2>The magic on your console with this-value enabled</h2>
 		<img src="console-this.png" />
-		<h2>The magic on your console inspected</h2>
-		<img src="console-inspect.png" />
-		<h2>Example output for nested calls (this- and return-value disabled)</h2>
-		<img src="console-nested.png" />
 		<h1 id="docs">Documentation / Reference</h1>
 		<p>Include jquery.inlog.js after jQuery core and you're done. See options if you want more control.</p>
 		<h2>Options</h2>
 		<p>You can call $.inlog(options) any time to change options. Available options:</p>
 <pre class="prettyfy">var defaults = {
-	enabled: true, //Shortcut: $.inlog(true|false);
+	enabled: false, //Shortcut: $.inlog(true|false);
 	thisValue: false, //Output this-value or not
 	returnValue: true, //Output return-value or not
-	indent: false //Indent nested calls or not
+	indent: true //Indent nested calls or not
 };</pre>
 	</div>
 
