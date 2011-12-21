@@ -1,9 +1,9 @@
 ;(function(undefined) {
 	var defaults = {
-		enabled: true,//Enable logging
+		enabled: false,//Enable logging
 		thisValue: false,//Output this-value
 		returnValue: true,//Output return-value
-		indent: false,//Indent nested calls
+		indent: true,//Indent nested calls
 		maxDepth: -1//Max depth of nested calls
 	};
 
