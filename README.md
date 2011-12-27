@@ -69,7 +69,7 @@ TODO
 	* each
 	* map
 	* find more functions in need of special treatments
-* Do the same for Sizzle (jQuery.find)
+* ~~Do the same for Sizzle (jQuery.find)~~
 	* Add an option to enable Sizzle debugging
 * ~~Output nested calls nested with console.group(), e.g.: fadeOut() calls animate() which calls queue()~~
 	* ~~Right now, the output for nested calls is in "wrong" order (inner most first)~~

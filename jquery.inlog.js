@@ -3,11 +3,11 @@
 		enabled: false,//Enable logging
 		thisValue: false,//Output this-value
 		returnValue: true,//Output return-value
-		indent: true,//Indent nested calls
-		maxDepth: -1//Max depth of nested calls
+		indent: true//Indent nested calls
 	};
 
 	var settings = jQuery.extend({}, defaults);
+	var originaljQuery = jQuery;
 
 
 	/*
@@ -53,6 +53,8 @@
 						"arguments": ["<some values or pointers>"],
 						"return": "<some value or pointer>",
 						"sub": []
+					}, {
+						//Moar...
 					}
 				]
 			}
@@ -75,7 +77,7 @@
 
 		for(var i = 0; i < origArguments.length; i++) {
 			//You may pass "undefined" explicitely to a function.
-			//foo() ist something else than foo(undefined)
+			//foo() ist something else than foo(undefined).
 			if(origArguments[i] === undefined) {
 				break;
 			}
@@ -100,9 +102,16 @@
 		}
 
 		console.log.apply(console, params);
-	};
+	}
 
 
+	/**
+	 * Outputs the stack trace to console.
+	 * Basically simple tree traversing.
+	 *
+	 * @param trace The JSON Object with the trace info
+	 * @returns undefined
+	 * */
 	function logTrace(trace) {
 		logFunctionCall(trace["function"], trace["arguments"], trace["return"], trace["this"]);
 
@@ -112,6 +121,7 @@
 				console.groupCollapsed();
 			}
 
+			//Output each sub call.
 			for(var i = 0; i < trace["sub"].length; i++) {
 				logTrace(trace["sub"][i]);
 			}
@@ -124,8 +134,8 @@
 
 
 	/**
-	 * Creates a Function which calls the "originalFunction"
-	 * and logs the call with the function as called "name".
+	 * Creates a Function which calls the "origFunction"
+	 * and logs the call with the function as called "funcName".
 	 *
 	 * @param funcName The name of the original function. Human readable.
 	 * @param origFunction A reference to the original function getting wrapped.
@@ -138,7 +148,7 @@
 				return origFunction.apply(this, arguments);
 			}
 
-			//Create new trace and keep track of it
+			//Create new trace and keep track of it.
 			var _trace = {
 				"function": funcName,
 				"this": this,
@@ -146,81 +156,121 @@
 				"sub": []
 			};
 
-			//Keep track of out parent trace, if any.
+			//Keep track of parent trace, if any.
 			var parenttrace;
 
-			//Keep track if this was the first call
+			//Keep track if this was the first call.
 			var isFirst = (tracedepth === 0);
 
 			tracedepth++;
 
-			//Check if this is the first call or if already deeper
+			//Check if this is the first call or if already deeper.
 			if(isFirst) {
-				//Set everything to the newly created trace
+				//Set everything to the newly created trace.
 				maintrace = subtrace = _trace;
 			} else {
 				parenttrace = subtrace;
 
-				//Push the new trace to the path of the parent trace
+				//Push the new trace to the path of the parent trace.
 				subtrace["sub"].push(_trace);
 				subtrace = _trace;
 			}
 
-			//Call the original function
+			//Call the original function.
 			var ret = origFunction.apply(this, arguments);
 
-			//Trace the return value (unknown before this point)
+			//Trace the return value (unknown before this point).
 			_trace["return"] = ret;
 
-			//Reset tracing if this function call was the top most
+			//Reset tracing if this function call was the top most.
 			if(isFirst) {
 				tracedepth = 0;
 
-				//Log the shit out of it
+				//Log the shit out of it.
 				logTrace(maintrace);
 			} else {
 				//Reset to parent trace,
-				//because there may be calls on the same level as we are
+				//because there may be calls on the same level as we are.
 				subtrace = parenttrace;
 			}
 
-			//Return the original return value as if nothing happened
+			//Return the original return value as if nothing happened.
 			return ret;
 		};
-	};
+	}
 
 
-	/*
-	 * Injection for the core jQuery function.
-	 * Needs some special treatment.
-	 */
-	(function() {
-		//Keep track of the original function
-		var tmp = jQuery;
+	/**
+	 * Injects log calls inside each function of "obj",
+	 * except the ones in "ignore".
+	 *
+	 * @param obj An object which should get each function replaced
+	 * @param ignore An optional array of strings with keys to ignore
+	 * @returns undefined
+	 * */
+	function injectAll(obj, ignore) {
+		ignore = ',' + (ignore || []).join(',') + ',';
 
-		//Overwrite that thing
-		jQuery = createReplacementFunction('jQuery', tmp);
-
-		tmp.extend(jQuery, tmp);
-		$ = jQuery;
-	})();
-
-
-	/*
-	 * Generic injections for most functions.
-	 */
-	(function() {
-		var rx_ignore = /^constructor|jquery|init$/;
-
-		//Iterate over all function and replace most of them
-		for(var name in jQuery.fn) {
-			if(jQuery.fn.hasOwnProperty(name) && jQuery.isFunction(jQuery.fn[name]) && !rx_ignore.test(name)) {
+		for(var prop in obj) {
+			if(
+				obj.hasOwnProperty(prop) &&
+				jQuery.isFunction(obj[prop]) &&
+				ignore.indexOf(',' + prop + ',') === -1
+			) {
 				//Keep track of the original function
-				var tmp = jQuery.fn[name];
+				var tmp = obj[prop];
 
 				//Overwrite that thing
-				jQuery.fn[name] = createReplacementFunction(name, tmp);
+				obj[prop] = createReplacementFunction(prop, tmp);
+
+				//Maybe the function had some props we just removed
+				originaljQuery.extend(obj[prop], tmp);
 			}
 		}
-	})();
+	}
+
+
+	/**
+	 * Injects log calls inside some functions of "obj",
+	 * namely all inside "consider".
+	 *
+	 * @param obj An object which should get some functions replaced
+	 * @param consider An array of strings with keys to consider
+	 * @returns undefined
+	 * */
+	function injectSome(obj, consider) {
+		consider = ',' + consider.join(',') + ',';
+
+		for(var prop in obj) {
+			if(
+				obj.hasOwnProperty(prop) &&
+				jQuery.isFunction(obj[prop]) &&
+				consider.indexOf(',' + prop + ',') !== -1
+			) {
+				//Keep track of the original function
+				var tmp = obj[prop];
+
+				//Overwrite that thing
+				obj[prop] = createReplacementFunction(prop, tmp);
+
+				//Maybe the function had some props we just removed
+				originaljQuery.extend(obj[prop], tmp);
+			}
+		}
+	}
+
+
+	//Is the dollar actually jQuery?
+	if(window.jQuery === window.$) {
+		injectSome(window, ['jQuery', '$']);
+	} else {
+		injectSome(window, ['jQuery']);
+	}
+
+	//Usual jQuery stuff like find, children, animate, css, etc.
+	injectAll(jQuery.fn, ['constructor', 'jquery', 'init']);
+
+	//Sizzling hot
+	injectAll(jQuery.find);
+	injectAll(jQuery.find.selectors);
 })();
