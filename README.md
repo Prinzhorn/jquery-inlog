@@ -37,23 +37,41 @@ $("#foo").parents(".bar").next().prev().parent().find(".foo:last").text("test");
 Would output something like the following
 
 ```
-jQuery("#foo") ↷ [div#foo]
-parents(".bar") ↷ [div.bar, div.bar]
-next() ↷ [div#bacon]
-prev() ↷ [div.bar]
-parent() ↷ [body]
-find(".foo:last") ↷ []
++ $("#foo") ↷ [div#foo]
++ parents(".bar") ↷ [div.bar, div.bar]
++ next() ↷ [div#bacon]
++ prev() ↷ [div.bar]
++ parent() ↷ [body]
+- fadeOut() ↷ [body]
+	- animate(Object { opacity="hide"}) ↷ [body]
+		- queue("fx", g()) ↷ [body]
+			- each(function()) ↷ [body]
+				- is(":hidden") ↷ false
+				- matchesSelector(<body style="opacity: 0.920047;">, ":hidden") ↷ false
+					  isXML(<body style="opacity: 0.920047;">) ↷ false
+					  isXML(Document index.html) ↷ false
+					- filter(":hidden", [body]) ↷ []
+						isXML(<body style="opacity: 0.920047;">) ↷ false
 ```
 
 or with this-value enabled
 
 ```
-(Window index.html).jQuery("#foo") ↷ [div#foo]
-([div#foo]).parents(".bar") ↷ [div.bar, div.bar]
-([div.bar, div.bar]).next() ↷ [div#bacon]
-([div#bacon]).prev() ↷ [div.bar]
-([div.bar]).parent() ↷ [body]
-([body]).find(".foo:last") ↷ []
++ (Window index.html).$("#foo") ↷ [div#foo]
++ ([div#foo]).parents(".bar") ↷ [div.bar, div.bar]
++ ([div.bar, div.bar]).next() ↷ [div#bacon]
++ ([div#bacon]).prev() ↷ [div.bar]
++ ([div.bar]).parent() ↷ [body]
+- ([body]).fadeOut() ↷ [body]
+	- ([body]).animate(Object { opacity="hide"}) ↷ [body]
+		- ([body]).queue("fx", g()) ↷ [body]
+			- ([body]).each(function()) ↷ [body]
+				- ([body]).is(":hidden") ↷ false
+				- (function()).matchesSelector(<body style="opacity: 0.920047;">, ":hidden") ↷ false
+					  (function()).isXML(<body style="opacity: 0.920047;">) ↷ false
+					  (function()).isXML(Document index.html) ↷ false
+					- (function()).filter(":hidden", [body]) ↷ []
+						(function()).isXML(<body style="opacity: 0.920047;">) ↷ false
 ```
 
 Your can inspect return values, the this-value and even all parameters! WOOOOT!
