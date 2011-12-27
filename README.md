@@ -9,7 +9,7 @@ I call it black-box magic. Or short: black magic. Or even shorter: js
 
 The original idea was taken from https://github.com/fmsf/jQueryLog
 
-Only tested in Firefox with Firebug. Nuff for me.
+Only tested in Firefox with Firebug. Wo doesn't use those in dev env?
 
 
 Example
@@ -74,7 +74,8 @@ or with this-value enabled
 						(function()).isXML(<body style="opacity: 0.920047;">) ↷ false
 ```
 
-Your can inspect return values, the this-value and even all parameters! WOOOOT!
+You can not only inspect the multiple levels of nested function calls,
+but also every single parameter!
 
 
 TODO
@@ -88,7 +89,7 @@ TODO
 	* map
 	* find more functions in need of special treatments
 * ~~Do the same for Sizzle (jQuery.find)~~
-	* Add an option to enable Sizzle debugging
+	* Add an option to enable Sizzle debugging (really needed?)
 * ~~Output nested calls nested with console.group(), e.g.: fadeOut() calls animate() which calls queue()~~
 	* ~~Right now, the output for nested calls is in "wrong" order (inner most first)~~
 
