@@ -9,7 +9,7 @@ I call it black-box magic. Or short: black magic. Or even shorter: js
 
 The original idea was taken from https://github.com/fmsf/jQueryLog
 
-Only tested in Firefox with Firebug. Wo doesn't use those in dev env?
+Only tested in Firefox with Firebug. Who doesn't use those in dev env?
 
 
 Example
