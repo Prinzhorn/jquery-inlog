@@ -14,9 +14,12 @@
 	<div id="wrapper">
 		<ul>
 			<li><a href="#about">About</a></li>
+			<li><a href="#live-example">tl;dr Example</a></li>
 			<li><a href="#example">Example</a></li>
 			<li><a href="#docs">Documentation / Reference</a></li>
 		</ul>
+
+
 		<h1 id="about">jQuery-inlog</h1>
 		<p><em>jQuery-inlog</em> allows you to easily debug your jQuery code. See <strong>exactly</strong> what you pass to functions, what they return and in which context (this-value) they where executed.</p>
 		<ul>
@@ -28,16 +31,33 @@
 			<strong>Without changing any of your code!</strong>
 			I call it black-box magic. Or short: black magic. Or even shorter: js
 		</p>
+
+
+		<h1 id="live-example">tl;dr Example</h1>
+		<p>For those of you who can't wait or don't want to read the example.</p>
+		<ol>
+			<li>Open the Firebug console (hint: F12)</li>
+			<li>Press this button <input type="button" id="btnExample" value="Hi, I'm a button" /></li>
+			<li>The following code will then be run</li>
+		</ol>
+		<br />
+		<script src="https://gist.github.com/1528556.js?file=live-sample.js"></script>
+
 		<h1 id="example">Example</h1>
+
 		<p>Some random example with demo code</p>
+
 		<h2>The markup</h2>
 		<script src="https://gist.github.com/1528556.js?file=sample.html"></script>
 		<h2>The jQuery code</h2>
 		<script src="https://gist.github.com/1528556.js?file=sample.js"></script>
+
 		<h2>The magic on your console</h2>
-		<img src="console.png" />
+		<img src="console.png" alt="Console output" />
+
 		<h2>The magic on your console with this-value enabled</h2>
-		<img src="console-this.png" />
+		<img src="console-this.png" alt="Console output with this-value enabled" />
+
 		<h1 id="docs">Documentation / Reference</h1>
 		<p>Include jquery.inlog.js after jQuery core and enable it by calling $.inlog(true) or $.inlog(options).</p>
 		<h2>Options</h2>
@@ -50,7 +70,11 @@
 	<script type="text/javascript">
 	/* <![CDATA[ */
 	$(function() {
-		;
+		$('#btnExample').click(function() {
+			$.inlog(true);
+			$('#about').siblings('h1').add('h2').css('color', 'red').end().text('Oh my! What did you do?');
+			$.inlog(false);
+		});
 	});
 	/* ]]> */
 	</script>
