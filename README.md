@@ -90,6 +90,25 @@ You can not only inspect the multiple levels of nested function calls,
 but also every single parameter!
 
 
+Documentation / Reference
+========
+
+Include jquery.inlog.js after jQuery core and enable it by calling $.inlog(true) or $.inlog(options).
+
+Options:
+```js
+var defaults = {
+	enabled: false, //Shortcut: $.inlog(true|false);
+	thisValue: false, //Output this-value or not
+	returnValue: true, //Output return-value or not
+	indent: true, //Indent nested calls or not
+	maxDepth: -1 //How many levels of nested calls to output
+};
+
+```
+
+
+
 TODO
 ========
 
