@@ -3,7 +3,8 @@
 		enabled: false,//Enable logging
 		thisValue: false,//Output this-value
 		returnValue: true,//Output return-value
-		indent: true//Indent nested calls
+		indent: true,//Indent nested calls
+		maxDepth: -1//Max depth of nested calls
 	};
 
 	var settings = jQuery.extend({}, defaults);
@@ -201,51 +202,32 @@
 
 
 	/**
-	 * Injects log calls inside each function of "obj",
-	 * except the ones in "ignore".
+	 * Injects log calls inside some functions of "obj"
+	 * depending on the "list" and "inverted" parameter.
 	 *
-	 * @param obj An object which should get each function replaced
-	 * @param ignore An optional array of strings with keys to ignore
+	 * If "inverted" is true, only the props inside "list" are considered.
+	 * If "inverted" is not true, all props inside "list" are ignored.
+	 *
+	 * @param obj An object which should get each function replaced.
+	 * @param list An optional array of strings with props to consider.
+	 * @param inverted An optional boolean indicating how "list" is to be interpreted.
 	 * @returns undefined
 	 * */
-	function injectAll(obj, ignore) {
-		ignore = ',' + (ignore || []).join(',') + ',';
+	function inject(obj, list, inverted) {
+		//Make a string out of the array because we use String.indexOf
+		list = ',' + (list || []).join(',') + ',';
+
+		//Anything but true is considered false
+		inverted = inverted === true;
 
 		for(var prop in obj) {
 			if(
+				//Not inherited
 				obj.hasOwnProperty(prop) &&
+				//Actually a function
 				jQuery.isFunction(obj[prop]) &&
-				ignore.indexOf(',' + prop + ',') === -1
-			) {
-				//Keep track of the original function
-				var tmp = obj[prop];
-
-				//Overwrite that thing
-				obj[prop] = createReplacementFunction(prop, tmp);
-
-				//Maybe the function had some props we just removed
-				originaljQuery.extend(obj[prop], tmp);
-			}
-		}
-	}
-
-
-	/**
-	 * Injects log calls inside some functions of "obj",
-	 * namely all inside "consider".
-	 *
-	 * @param obj An object which should get some functions replaced
-	 * @param consider An array of strings with keys to consider
-	 * @returns undefined
-	 * */
-	function injectSome(obj, consider) {
-		consider = ',' + consider.join(',') + ',';
-
-		for(var prop in obj) {
-			if(
-				obj.hasOwnProperty(prop) &&
-				jQuery.isFunction(obj[prop]) &&
-				consider.indexOf(',' + prop + ',') !== -1
+				//Inside our list or not, depending on what we want
+				(list.indexOf(',' + prop + ',') !== -1) === inverted
 			) {
 				//Keep track of the original function
 				var tmp = obj[prop];
@@ -262,15 +244,23 @@
 
 	//Is the dollar actually jQuery?
 	if(window.jQuery === window.$) {
-		injectSome(window, ['jQuery', '$']);
+		inject(window, ['jQuery', '$'], true);
 	} else {
-		injectSome(window, ['jQuery']);
+		inject(window, ['jQuery'], true);
 	}
 
 	//Usual jQuery stuff like find, children, animate, css, etc.
-	injectAll(jQuery.fn, ['constructor', 'jquery', 'init']);
+	inject(jQuery.fn, ['constructor', 'jquery', 'init']);
 
 	//Sizzling hot
-	injectAll(jQuery.find);
-	injectAll(jQuery.find.selectors);
+	inject(jQuery.find);
+
+	//Sizzle selectors, that actually contain functions
+	inject(jQuery.find.selectors.attrHandle);
+	inject(jQuery.find.selectors.relative);
+	inject(jQuery.find.selectors.find);
+	inject(jQuery.find.selectors.preFilter);
+	inject(jQuery.find.selectors.filters);
+	inject(jQuery.find.selectors.setFilters);
+	inject(jQuery.find.selectors.filter);
 })();
