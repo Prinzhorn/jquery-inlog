@@ -54,7 +54,7 @@ Would output something like the following
 						isXML(<body style="opacity: 0.920047;">) ↷ false
 ```
 
-or with this-value enabled
+or with ```thisValue: true```
 
 ```
 + (Window index.html).$("#foo") ↷ [div#foo]
@@ -73,6 +73,18 @@ or with this-value enabled
 					- (function()).filter(":hidden", [body]) ↷ []
 						(function()).isXML(<body style="opacity: 0.920047;">) ↷ false
 ```
+
+or less verbose with ```maxDepth: 0```, if that's enough (it should be)
+
+```
+$("#foo") ↷ [div#foo]
+parents(".bar") ↷ [div.bar, div.bar]
+next() ↷ [div#bacon]
+prev() ↷ [div.bar]
+parent() ↷ [body]
+fadeOut() ↷ [body]
+```
+
 
 You can not only inspect the multiple levels of nested function calls,
 but also every single parameter!
