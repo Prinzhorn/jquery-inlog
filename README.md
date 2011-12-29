@@ -96,7 +96,8 @@ Documentation / Reference
 Include jquery.inlog.js after jQuery core and enable it by calling $.inlog(true) or $.inlog(options).
 
 Options:
-```javascript
+
+```
 var defaults = {
 	enabled: false, //Shortcut: $.inlog(true|false);
 	thisValue: false, //Output this-value or not
@@ -105,7 +106,6 @@ var defaults = {
 	maxDepth: -1 //How many levels of nested calls to output
 };
 ```
-
 
 
 TODO
