@@ -149,6 +149,11 @@
 				return origFunction.apply(this, arguments);
 			}
 
+			//We deep enough
+			if(settings.maxDepth !== -1 && tracedepth > settings.maxDepth) {
+				return origFunction.apply(this, arguments);
+			}
+
 			//Create new trace and keep track of it.
 			var _trace = {
 				"function": funcName,
