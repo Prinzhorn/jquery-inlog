@@ -37,6 +37,7 @@ ol, ul {
 }
 
 #wrapper {
+	position:relative;
 	width:940px;
 	margin:1em auto;
 	padding:1em;
