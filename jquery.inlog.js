@@ -3,8 +3,9 @@
 		enabled: false,//Enable logging
 		thisValue: false,//Output this-value
 		returnValue: true,//Output return-value
-		indent: true,//Indent nested calls
-		maxDepth: -1//Max depth of nested calls
+		indent: true,//Indent nested calls (makes sense for maxDepth !== 0)
+		maxDepth: 0,//Max depth of nested calls
+		rawOutput: false//If true, the raw stacktrace-objects will be printed (thisValue, returnValue and indent are all included for free)
 	};
 
 	var settings = jQuery.extend({}, defaults);
@@ -110,10 +111,18 @@
 	 * Outputs the stack trace to console.
 	 * Basically simple tree traversing.
 	 *
+	 * If rawOutput is enabled, it will simply dump the stacktrace.
+	 *
 	 * @param trace The JSON Object with the trace info
 	 * @returns undefined
 	 * */
 	function logTrace(trace) {
+		if(settings.rawOutput) {
+			console.log('%o', trace);
+
+			return;
+		}
+
 		logFunctionCall(trace["function"], trace["arguments"], trace["return"], trace["this"]);
 
 		//Has sub calls?
