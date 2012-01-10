@@ -85,7 +85,7 @@ or even verbose with ```thisValue: true```
 						(function()).isXML(<body style="opacity: 0.920047;">) ↷ false
 ```
 
-or if you're hardcore, you can set ```rawOutput: true``` to get the raw stacktrace object created by the plugin
+or if you're hardcore, you can set ```rawOutput: true``` to get the raw stackt race object created by the plugin
 
 ```
 arguments
@@ -119,7 +119,7 @@ var defaults = {
 	returnValue: true,//Output return-value
 	indent: true,//Indent nested calls (makes sense for maxDepth !== 0)
 	maxDepth: 0,//Max depth of nested calls
-	rawOutput: false//If true, the raw stacktrace-objects will be printed (thisValue, returnValue and indent are all included for free)
+	rawOutput: false//If true, the raw stack trace objects will be printed (thisValue, returnValue and indent are all included for free)
 };
 ```
 

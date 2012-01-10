@@ -5,7 +5,7 @@
 		returnValue: true,//Output return-value
 		indent: true,//Indent nested calls (makes sense for maxDepth !== 0)
 		maxDepth: 0,//Max depth of nested calls
-		rawOutput: false//If true, the raw stacktrace-objects will be printed (thisValue, returnValue and indent are all included for free)
+		rawOutput: false//If true, the raw stack trace objects will be printed (thisValue, returnValue and indent are all included for free)
 	};
 
 	var settings = jQuery.extend({}, defaults);
@@ -111,7 +111,7 @@
 	 * Outputs the stack trace to console.
 	 * Basically simple tree traversing.
 	 *
-	 * If rawOutput is enabled, it will simply dump the stacktrace.
+	 * If rawOutput is enabled, it will simply dump the stack trace.
 	 *
 	 * @param trace The JSON Object with the trace info
 	 * @returns undefined
