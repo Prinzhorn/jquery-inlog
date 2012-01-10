@@ -94,14 +94,14 @@ arguments
 function
 	"parents"
 
-return
-	[div.bar, div.bar]
+this
+	[div#foo]
 
 sub
 	[Object { function="matches", arguments=[2], sub=[2], more...}, Object { function="pushStack", this=[1], arguments=[3], more...}]
 
-this
-	[div#foo]
+return
+	[div.bar, div.bar]
 ```
 
 

@@ -70,11 +70,11 @@
 	 *
 	 * @param funcName A human readable name of the function called
 	 * @param origArguments The original "arguments" property inside the function
-	 * @param origReturn The original return value of the function
 	 * @param origThis The original context the function was running in
+	 * @param origReturn The original return value of the function
 	 * @returns undefined
 	 * */
-	function logFunctionCall(funcName, origArguments, origReturn, origThis) {
+	function logFunctionCall(funcName, origArguments, origThis, origReturn) {
 		var params = [], paramFormatStrings = [], formatString = '';
 
 		for(var i = 0; i < origArguments.length; i++) {
@@ -123,7 +123,7 @@
 			return;
 		}
 
-		logFunctionCall(trace["function"], trace["arguments"], trace["return"], trace["this"]);
+		logFunctionCall(trace["function"], trace["arguments"], trace["this"], trace["return"]);
 
 		//Has sub calls?
 		if(trace["sub"].length) {
@@ -166,8 +166,8 @@
 			//Create new trace and keep track of it.
 			var _trace = {
 				"function": funcName,
-				"this": this,
 				"arguments": arguments,
+				"this": this,
 				"sub": []
 			};
 
