@@ -34,7 +34,18 @@ and the following jQuery calls
 $("#foo").parents(".bar").next().prev().parent().find(".foo:last").text("test");
 ```
 
-Would output something like the following
+will result in the following output with default settings
+
+```
+$("#foo") ↷ [div#foo]
+parents(".bar") ↷ [div.bar, div.bar]
+next() ↷ [div#bacon]
+prev() ↷ [div.bar]
+parent() ↷ [body]
+fadeOut() ↷ [body]
+```
+
+or if you want to know what's really happening, set ```maxDepth: -1``` (last branch expanded exemplarily)
 
 ```
 + $("#foo") ↷ [div#foo]
@@ -54,7 +65,7 @@ Would output something like the following
 						isXML(<body style="opacity: 0.920047;">) ↷ false
 ```
 
-or with ```thisValue: true```
+or even verbose with ```thisValue: true```
 
 ```
 + (Window index.html).$("#foo") ↷ [div#foo]
@@ -74,20 +85,24 @@ or with ```thisValue: true```
 						(function()).isXML(<body style="opacity: 0.920047;">) ↷ false
 ```
 
-or less verbose with ```maxDepth: 0```, if that's enough (it should be)
+or if you're hardcore, you can set ```rawOutput: true``` to get the raw stacktrace object created by the plugin
 
 ```
-$("#foo") ↷ [div#foo]
-parents(".bar") ↷ [div.bar, div.bar]
-next() ↷ [div#bacon]
-prev() ↷ [div.bar]
-parent() ↷ [body]
-fadeOut() ↷ [body]
+arguments
+	[".bar"]
+
+function
+	"parents"
+
+return
+	[div.bar, div.bar]
+
+sub
+	[Object { function="matches", arguments=[2], sub=[2], more...}, Object { function="pushStack", this=[1], arguments=[3], more...}]
+
+this
+	[div#foo]
 ```
-
-
-You can not only inspect the multiple levels of nested function calls,
-but also every single parameter!
 
 
 Documentation / Reference
@@ -99,11 +114,12 @@ Options:
 
 ```
 var defaults = {
-	enabled: false, //Shortcut: $.inlog(true|false);
-	thisValue: false, //Output this-value or not
-	returnValue: true, //Output return-value or not
-	indent: true, //Indent nested calls or not
-	maxDepth: -1 //How many levels of nested calls to output
+	enabled: false,//Enable logging
+	thisValue: false,//Output this-value
+	returnValue: true,//Output return-value
+	indent: true,//Indent nested calls (makes sense for maxDepth !== 0)
+	maxDepth: 0,//Max depth of nested calls
+	rawOutput: false//If true, the raw stacktrace-objects will be printed (thisValue, returnValue and indent are all included for free)
 };
 ```
 
@@ -112,14 +128,10 @@ TODO
 ========
 
 * include/run the jQuery core tests to ensure that we don't cause any side effects
-* ~~Not all functions are included (right now only http://api.jquery.com/category/traversing/)~~
-* Special treatment for:
-	* ~~jQuery() function~~
+	* They basically succeed. But the test for noConflict fails,
+		because it compares references and jQuery-inlog creates his own jQuery function.
+* Special treatment (on request) for:
 	* each
 	* map
 	* find more functions in need of special treatments
-* ~~Do the same for Sizzle (jQuery.find)~~
-	* Add an option to enable Sizzle debugging (really needed?)
-* ~~Output nested calls nested with console.group(), e.g.: fadeOut() calls animate() which calls queue()~~
-	* ~~Right now, the output for nested calls is in "wrong" order (inner most first)~~
 
