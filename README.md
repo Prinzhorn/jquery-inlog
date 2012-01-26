@@ -31,7 +31,7 @@ Imagine the following markup
 and the following jQuery calls
 
 ```javascript
-$("#foo").parents(".bar").next().prev().parent().find(".foo:last").text("test");
+$("#foo").parents(".bar").next().prev().parent().fadeOut();
 ```
 
 will result in the following output with default settings
