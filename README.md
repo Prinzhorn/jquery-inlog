@@ -116,7 +116,7 @@ Documentation / Reference
 
 Include jquery.inlog.js after jQuery core and enable it by calling $l(true) or $l(options).
 
-Note: ```$l``` is any alias for ```jQuery.inlog```. If for any reason window.$l is already defined, it won't be overwritten.
+Note: ```$l``` is an alias for ```jQuery.inlog```. If for any reason window.$l is already defined, it won't be overwritten.
 
 Options:
 
