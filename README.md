@@ -1,8 +1,8 @@
-jQuery inlog (v 1.0.0)
+jQuery-inlog (v 1.0.0)
 ======
 
 See what your jQuery code does inside like a boss.
-jQuery inlog is a passive plugin, which injects (js ftw!) console.log calls inside your jQuery core.
+jQuery-inlog is a passive plugin, which injects (js ftw!) console.log calls inside your jQuery core.
 It makes debugging of selectors and chains a breeze. No more alert($obj.length) and stuff...
 
 I call it black-box magic. Or short: black magic. Or even shorter: js
@@ -13,7 +13,7 @@ Works in any Browser with a decent console (Opera for example doesn't know about
 I personally think the output reads best on Firebug.
 
 
-If you use jQuery inlog I'd be very interested to hear from you! https://twitter.com/Prinzhorn
+If you use jQuery-inlog I'd be very interested to hear from you! https://twitter.com/Prinzhorn
 
 
 Example
