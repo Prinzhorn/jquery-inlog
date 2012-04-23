@@ -42,9 +42,9 @@
 			<li>Open the Firebug console (hint: F12)</li>
 			<li>
 				Press this button <input type="button" id="btnExample" value="Hi, I'm a button" />
-				<input type="checkbox" id="cbHardcore" /><label for="cbHardcore">I'm hardcore (raw output)</label>
+				(<input type="checkbox" id="cbHardcore" /><label for="cbHardcore">I'm hardcore - raw output</label>), the following code will then be run:
 			</li>
-			<li>The following code will then be run</li>
+			<li>Be amazed</li>
 		</ol>
 		<br />
 		<script src="https://gist.github.com/1528556.js?file=live-sample.js"></script>
@@ -72,10 +72,10 @@
 		<img src="demo-content/console-raw.png" alt="Console output with raw-output enabled" />
 
 		<h1 id="docs">Documentation / Reference</h1>
-		<p>Include jquery.inlog.js after jQuery core and enable it by calling $.inlog(true) or $.inlog(options).</p>
-		<p>It's best practice to include $.inlog(false); right after the part you want to inspect.</p>
+		<p>Include jquery.inlog.js after jQuery core and enable it by calling $l(true) or $l(options).</p>
+		<p>It's best practice to include $l(false); right after the part you want to inspect.</p>
 		<h2>Options</h2>
-		<p>You can call $.inlog(options) any time to change options. Available options:</p>
+		<p>You can call $l(options) any time to change options. Available options:</p>
 		<script src="https://gist.github.com/1528556.js?file=options.js"></script>
 	</div>
 
@@ -92,7 +92,7 @@
 				rawOutput: hardcore.checked
 			});
 
-			$('#about').siblings('h1').add('h2').css('color', 'red').end().text('Oh my! What did you do?');
+			$('#about').siblings('h1').add('h2').css('color', '#09f').end().css('text-transform', 'uppercase');
 
 			$l(false);
 		});
