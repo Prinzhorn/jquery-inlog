@@ -26,6 +26,12 @@
 		}
 	};
 
+	jQuery.inlog.VERSION = '1.0.0';
+
+	if(!window.$l) {
+		window.$l = jQuery.inlog;
+	}
+
 
 	/*
 	 * Since nothing runs parallel,

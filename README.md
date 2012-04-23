@@ -1,15 +1,19 @@
-jQuery inlog
+jQuery inlog (v 1.0.0)
 ======
 
 See what your jQuery code does inside like a boss.
 jQuery inlog is a passive plugin, which injects (js ftw!) console.log calls inside your jQuery core.
-It makes debugging of selectors and chains a breeze.
+It makes debugging of selectors and chains a breeze. No more alert($obj.length) and stuff...
 
 I call it black-box magic. Or short: black magic. Or even shorter: js
 
 The original idea was taken from https://github.com/fmsf/jQueryLog
 
-Only tested in Firefox with Firebug. Who doesn't use those in dev env?
+Works in any Browser with a decent console (Opera for example doesn't know about "%o" format string).
+I personally think the output reads best on Firebug.
+
+
+If you use jQuery inlog I'd be very interested to hear from you! https://twitter.com/Prinzhorn
 
 
 Example
@@ -31,7 +35,9 @@ Imagine the following markup
 and the following jQuery calls
 
 ```javascript
+$l(true);
 $("#foo").parents(".bar").next().prev().parent().fadeOut();
+$l(false);
 ```
 
 will result in the following output with default settings
@@ -108,7 +114,9 @@ return
 Documentation / Reference
 ========
 
-Include jquery.inlog.js after jQuery core and enable it by calling $.inlog(true) or $.inlog(options).
+Include jquery.inlog.js after jQuery core and enable it by calling $l(true) or $l(options).
+
+Note: ```$l``` is any alias for ```jQuery.inlog```. If for any reason window.$l is already defined, it won't be overwritten.
 
 Options:
 
@@ -122,16 +130,3 @@ var defaults = {
 	rawOutput: false//If true, the raw stack trace objects will be printed (thisValue, returnValue and indent are all included for free)
 };
 ```
-
-
-TODO
-========
-
-* include/run the jQuery core tests to ensure that we don't cause any side effects
-	* They basically succeed. But the test for noConflict fails,
-		because it compares references and jQuery-inlog creates his own jQuery function.
-* Special treatment (on request) for:
-	* each
-	* map
-	* find more functions in need of special treatments
-

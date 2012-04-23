@@ -22,7 +22,7 @@
 	/* <![CDATA[ */
 
 	$(function() {
-		$.inlog({
+		$l({
 			enabled: true,
 			thisValue: true,
 			returnValue: true,
@@ -31,9 +31,11 @@
 
 		//$('body').find('div');
 		//$('div').fadeOut();
-		$("#foo").parents(".bar").next().prev().parent().fadeOut();
+		$("#foo").parents(".bar").next().prev().parent().fadeOut(function() {
+			$(this).fadeIn();
+		});
 
-		$.inlog(false);
+		$l(false);
 	});
 	/* ]]> */
 	</script>
