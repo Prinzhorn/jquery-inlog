@@ -1,4 +1,4 @@
-;(function(undefined) {
+(function(undefined) {
 	var defaults = {
 		enabled: false,//Enable logging
 		thisValue: false,//Output this-value
@@ -10,7 +10,6 @@
 
 	var settings = jQuery.extend({}, defaults);
 	var originaljQuery = jQuery;
-
 
 	/*
 	 * Allows for controlling from outside.
